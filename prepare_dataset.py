@@ -9,7 +9,7 @@ columns = [
 ]
 
 # Step 2: Load dataset
-df = pd.read_csv("processed.cleveland.data", names=columns)
+df = pd.read_csv("heart.csv", names=columns)
 
 print("Dataset loaded!")
 
@@ -48,3 +48,34 @@ train_df.to_csv("train_data.csv", index=False)
 test_df.to_csv("test_data.csv", index=False)
 
 print("✅ Train and Test datasets created successfully!")
+
+# Step 9: Create scaled datasets
+
+from sklearn.preprocessing import StandardScaler
+
+# Separate features and target again
+X_train = train_df.drop("target", axis=1)
+y_train = train_df["target"]
+
+X_test = test_df.drop("target", axis=1)
+y_test = test_df["target"]
+
+# Apply scaling
+scaler = StandardScaler()
+
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Convert back to DataFrame
+X_train_scaled_df = pd.DataFrame(X_train_scaled, columns=X.columns)
+X_test_scaled_df = pd.DataFrame(X_test_scaled, columns=X.columns)
+
+# Add target back
+train_scaled_df = pd.concat([X_train_scaled_df, y_train.reset_index(drop=True)], axis=1)
+test_scaled_df = pd.concat([X_test_scaled_df, y_test.reset_index(drop=True)], axis=1)
+
+# Save scaled datasets
+train_scaled_df.to_csv("train_scaled.csv", index=False)
+test_scaled_df.to_csv("test_scaled.csv", index=False)
+
+print("✅ Scaled train and test datasets created!")
