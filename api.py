@@ -47,3 +47,4 @@ def predict(data: dict):
         "prediction": int(prediction),
         "result": "Heart Disease" if prediction == 1 else "No Heart Disease"
     }
+
